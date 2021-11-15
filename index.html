@@ -118,28 +118,28 @@
             <h2>Обо мне</h2>
             <div class="row">
                 <div class="about-photo">
-                    <img src="img/me.jpg" width="300" height="600" alt="Бергер Ирина">
+                    <img src="img/me.jpg" class="img-fluid" alt="Бергер Ирина">
                 </div>
                 <div class="col">
                     <div class="row">
-                        <div class="col-8 col-sm-4">
+                        <div class="col-8 col-sm-4 about-item">
                             <h3>Моё детство</h3>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ratione minima incidunt eum, delectus saepe omnis optio voluptate veritatis! Voluptas recusandae aperiam natus inventore dolorem unde cupiditate in! Quas commodi,
                                 sunt provident perspiciatis pariatur vel.</p>
                         </div>
-                        <div class="col-4 col-sm-8">
+                        <div class="col-4 col-sm-8 about-item">
                             <h3>Мои увлечения</h3>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod porro corrupti iure a dolor quisquam doloremque libero perferendis animi deleniti vel quae esse eligendi in dolorum nemo labore nihil odio eveniet architecto nobis
                                 sunt sapiente, dignissimos voluptates. Alias nostrum a quam excepturi, repellendus nam quod doloremque harum quaerat quibusdam, accusantium nihil impedit labore nisi perspiciatis? Repudiandae hic obcaecati rem distinctio
                                 id unde, molestias ex molestiae et quia perspiciatis odit illo iure explicabo fuga esse. Nemo ducimus dolores neque repellat ullam.</p>
                         </div>
-                        <div class="col-8 col-sm-8">
+                        <div class="col-8 col-sm-8 about-item">
                             <h3>Мои питомцы</h3>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod porro corrupti iure a dolor quisquam doloremque libero perferendis animi deleniti vel quae esse eligendi in dolorum nemo labore nihil odio eveniet architecto nobis
                                 sunt sapiente, dignissimos voluptates. Alias nostrum a quam excepturi, repellendus nam quod doloremque harum quaerat quibusdam, accusantium nihil impedit labore nisi perspiciatis? Repudiandae hic obcaecati rem distinctio
                                 id unde, molestias ex molestiae et quia perspiciatis odit illo iure explicabo fuga esse. Nemo ducimus dolores neque repellat ullam.</p>
                         </div>
-                        <div class="col-4 col-sm-4">
+                        <div class="col-4 col-sm-4 about-item">
                             <h3>Мои ещё что-то</h3>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ratione minima incidunt eum, delectus saepe omnis optio voluptate veritatis! Voluptas recusandae aperiam natus inventore dolorem unde cupiditate in! Quas commodi,
                                 sunt provident perspiciatis pariatur vel.</p>
@@ -151,10 +151,34 @@
         <section class="question">
             <a name="question"></a>
             <h2>Задать вопрос</h2>
-
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Имя</label>
+                <input type="text" class="form-control" id="question-name-input" placeholder="Иванов Иван Иванович">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Email</label>
+                <input type="email" class="form-control" id="question-email-input" placeholder="name@example.com">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Вопрос</label>
+                <textarea class="form-control" id="question-text-input" rows="3"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary main-button">Отправить вопрос</button>
         </section>
         <section class="footer">
 
+            <div class="row">
+                <div class="col">
+                    <p>&copy; Бергер Ирина Олеговна, 2021</p>
+                </div>
+                <div class="col-6">
+                </div>
+                <div class="col">
+                    <p>Телефон: +7(900)000-00-00</p>
+                    <p>Адрес: Россия, г. Бобруйск, улица Ленина, д. 0</p>
+                    <p>E-mail: berger@berger.ru</p>
+                </div>
+            </div>
         </section>
         </div>
 
