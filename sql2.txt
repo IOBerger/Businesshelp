@@ -1,0 +1,92 @@
+5*.
+Напишите запрос, который по массиву идентификаторов категорий соберёт массив названий соответствующих категорий. 
+Пример: на входе массив ARRAY[1, 2, 5, 7], на выходе  массив строк: 
+SELECT array_agg(title)
+FROM categories
+WHERE id=ANY('{1,2,3,4,5}');
+
+6*.
+Соберите мини-отчёт: реализуйте выборку количества объявлений по месяцам 2021 года. Поля для вывода: year, monthname, offers_amount. Отсортируйте отчёт по месяцам по возрастанию.  
+SELECT EXTRACT(year FROM offers.created_at) AS year,
+	CASE 
+		WHEN EXTRACT(month FROM offers.created_at)=1 THEN 'январь'
+		WHEN EXTRACT(month FROM offers.created_at)=2 THEN 'февраль'
+		WHEN EXTRACT(month FROM offers.created_at)=3 THEN 'март'
+		WHEN EXTRACT(month FROM offers.created_at)=4 THEN 'апрель'
+		WHEN EXTRACT(month FROM offers.created_at)=5 THEN 'май'
+		WHEN EXTRACT(month FROM offers.created_at)=6 THEN 'июнь'
+		WHEN EXTRACT(month FROM offers.created_at)=7 THEN 'июль'
+		WHEN EXTRACT(month FROM offers.created_at)=8 THEN 'август'
+		WHEN EXTRACT(month FROM offers.created_at)=9 THEN 'сентябрь'
+		WHEN EXTRACT(month FROM offers.created_at)=10 THEN 'октябрь'
+		WHEN EXTRACT(month FROM offers.created_at)=11 THEN 'ноябрь'
+		WHEN EXTRACT(month FROM offers.created_at)=12 THEN 'декабрь'
+	AS monthname,
+	COUNT(*) AS offers_amount
+FROM offers
+WHERE year=2021
+GRPOUP BY year, monthname
+ORDER BY offers.created_at
+
+7*.
+Реализуйте запрос из пункта 6 с добавлением нарастающего итога по месяцам. Те же столбцы + столбец offers_sum.
+SELECT EXTRACT(year FROM offers.created_at) AS year,
+	CASE 
+		WHEN EXTRACT(month FROM offers.created_at)=1 THEN 'январь'
+		WHEN EXTRACT(month FROM offers.created_at)=2 THEN 'февраль'
+		WHEN EXTRACT(month FROM offers.created_at)=3 THEN 'март'
+		WHEN EXTRACT(month FROM offers.created_at)=4 THEN 'апрель'
+		WHEN EXTRACT(month FROM offers.created_at)=5 THEN 'май'
+		WHEN EXTRACT(month FROM offers.created_at)=6 THEN 'июнь'
+		WHEN EXTRACT(month FROM offers.created_at)=7 THEN 'июль'
+		WHEN EXTRACT(month FROM offers.created_at)=8 THEN 'август'
+		WHEN EXTRACT(month FROM offers.created_at)=9 THEN 'сентябрь'
+		WHEN EXTRACT(month FROM offers.created_at)=10 THEN 'октябрь'
+		WHEN EXTRACT(month FROM offers.created_at)=11 THEN 'ноябрь'
+		WHEN EXTRACT(month FROM offers.created_at)=12 THEN 'декабрь'
+	AS monthname,
+	COUNT(*) AS offers_amount,
+	SUM(offers.price) AS offers_sum
+FROM offers
+WHERE year=2021
+GRPOUP BY year, monthname
+ORDER BY offers.created_at
+
+8*.
+Соберите jsonb-массив всех комментариев для объявления с id 7. Каждый комментарий должен быть представлен jsonb-объектом со следующими данными: id комментария, текст, дата создания, id пользователя, создавшего комментарий, фамилия и имя одной строкой, ссылка на аватар.
+SELECT jsonb_build_object(
+	'id_comment', comments.id,
+	'text', comments.comment_text,
+	'created_at', comments.created_at,
+	'id_user', comments.user_id,
+	'name', format('%s %s',users.first_name,users.last_name),
+	'author', users.author
+)
+FROM comments
+JOIN users ON comments.user_id=users.id
+WHERE comments,offer_id=7;
+
+9*.
+Создайте pl/pgsql-функцию, выполняющую запрос из п. 4.
+Функция должна принимать набор параметров-фильтров для поиска.
+Функция должна возвращать набор строк - список объявлений, соответствующих фильтрам.
+CREATE FUNCTION selection(varchar,varchar,integer,varchar) RETURNS TABLE (id integer,category varchar,first_name varchar, lastname varchar,title varchar,full_text text, price integer)
+$$
+DECLARE
+type ALIAS FOR $1
+category ALIAS FOR $2
+price ALIAS FOR $3
+word ALIAS FOR $4
+BEGIN
+RETURN QUERY 
+
+	SELECT offers.id, offers.offer_type, categories.title, users.first_name, users.last_name, offers.title, substring(offers.full_text, from 1 to 30) || '...', offers.price
+	JOIN category_offer ON offers.id=category_offer.offer_id
+	JOIN categories ON categories.id=category_offer.category_id
+	JOIN users ON users.id=offers.user_id
+	GROUP BY offers.id, offers.offer_type, categories.title, users.first_name, users.last_name, offers.title, offers.full_text, offers.price
+	WHERE offers.price<price and offers.offer_type=type and categories=category and offers.title LIKE '%'|| word || '%';
+
+END;
+$$ 
+LANGUAGE plpgsql
